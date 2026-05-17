@@ -1,38 +1,62 @@
-const mineflayer = require('mineflayer')
-const express = require('express')
+const mineflayer = require("mineflayer")
+const express = require("express")
 
+// giữ server sống (Railway không sleep)
 const app = express()
-const PORT = process.env.PORT || 3000
+app.get("/", (req, res) => res.send("OK"))
+app.listen(process.env.PORT || 3000)
 
-app.get('/', (req, res) => {
-  res.send('Bot is running')
-})
+// anti crash
+process.on("uncaughtException", () => {})
+process.on("unhandledRejection", () => {})
 
-app.listen(PORT, () => {
-  console.log('Web server chạy ở port', PORT)
-})
-
-// ===== BOT =====
 function createBot() {
+  console.log("Creating bot...")
+
   const bot = mineflayer.createBot({
-    host: 'furyvn.aternos.me',
+    host: "furyvn.aternos.me",
     port: 29776,
-    username: 'vianhdz',
+    username: "vianhdz",
+    auth: "offline",
     version: false
   })
 
-  bot.on('login', () => {
-    console.log('Bot đã vào server')
+  // giảm load ngay khi login
+  bot.once("login", () => {
+    console.log("Logged in")
+
+    bot._client.write("settings", {
+      locale: "en_US",
+      viewDistance: 2,   // cực thấp
+      chatFlags: 0,
+      chatColors: false,
+      skinParts: 0,
+      mainHand: 1
+    })
   })
 
-  bot.on('end', () => {
-    console.log('Bot bị disconnect, reconnect sau 5s...')
-    setTimeout(createBot, 5000)
+  bot.once("spawn", () => {
+    console.log("Bot spawned")
+
+    // đứng yên hoàn toàn = CPU gần 0
+    bot.clearControlStates()
+    bot.look(0, 0, true)
+
+    // 🔥 QUAN TRỌNG: tắt xử lý entity (giảm CPU mạnh)
+    bot.entities = {}
+
+    // 🔥 chặn physics loop
+    bot.physicsEnabled = false
   })
 
-  bot.on('error', (err) => {
-    console.log('Lỗi:', err)
+  // reconnect chậm lại (đỡ tốn CPU)
+  bot.on("end", () => {
+    console.log("Disconnected → reconnect sau 30s")
+    setTimeout(createBot, 30000)
   })
+
+  // tránh spam log (tốn CPU)
+  bot.on("error", () => {})
 }
 
 createBot()
