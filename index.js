@@ -35,7 +35,4 @@ function createBot() {
   })
 }
 
-HEAD
-createBot()
-createBot()
-78e8748 (add start script)
+creatBot()
