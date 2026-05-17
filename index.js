@@ -35,4 +35,4 @@ function createBot() {
   })
 }
 
-creatBot()
+createBot()
