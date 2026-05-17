@@ -2,8 +2,8 @@ const mineflayer = require('mineflayer')
 
 function createBot() {
   const bot = mineflayer.createBot({
-    host: 'IP_SERVER', // ví dụ: abc.aternos.me
-    port: 25565,
+    host: 'furyvn.aternos.me', // ví dụ: abc.aternos.me
+    port: 29776,
     username: 'BotAFK'
   })
 
