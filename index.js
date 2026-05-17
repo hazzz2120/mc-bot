@@ -15,7 +15,7 @@ app.listen(PORT, () => {
 // ===== BOT =====
 function createBot() {
   const bot = mineflayer.createBot({
-    host: 'Ifuryvn.aternos.me',
+    host: 'furyvn.aternos.me',
     port: 29776,
     username: 'TenBot',
     version: false
