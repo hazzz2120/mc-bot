@@ -1,11 +1,24 @@
 const mineflayer = require('mineflayer')
+const express = require('express')
 
+const app = express()
+const PORT = process.env.PORT || 3000
+
+app.get('/', (req, res) => {
+  res.send('Bot is running')
+})
+
+app.listen(PORT, () => {
+  console.log('Web server chạy ở port', PORT)
+})
+
+// ===== BOT =====
 function createBot() {
   const bot = mineflayer.createBot({
-    host: 'furyvn.aternos.me',
+    host: 'Ifuryvn.aternos.me',
     port: 29776,
-    username: 'vianhdzai',
-    version: false // auto detect
+    username: 'TenBot',
+    version: false
   })
 
   bot.on('login', () => {
@@ -20,14 +33,6 @@ function createBot() {
   bot.on('error', (err) => {
     console.log('Lỗi:', err)
   })
-
-  // 👉 thêm anti AFK
-  setInterval(() => {
-    if (bot.entity) {
-      bot.setControlState('jump', true)
-      setTimeout(() => bot.setControlState('jump', false), 500)
-    }
-  }, 10000)
 }
 
 createBot()
