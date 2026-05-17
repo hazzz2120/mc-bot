@@ -17,7 +17,7 @@ function createBot() {
   const bot = mineflayer.createBot({
     host: 'furyvn.aternos.me',
     port: 29776,
-    username: 'TenBot',
+    username: 'vianhdz',
     version: false
   })
 
