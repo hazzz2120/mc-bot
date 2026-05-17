@@ -35,8 +35,7 @@ function createBot() {
   })
 }
 
-<<<<<<< HEAD
+HEAD
 createBot()
-=======
 createBot()
->>>>>>> 78e8748 (add start script)
+78e8748 (add start script)
