@@ -12,7 +12,7 @@ const CONFIG = {
   port: 29776,
   username: "vianhdz",
   auth: "offline",
-  version: "1.21.1",        // Fabric 1.21.1 — phải chỉ định rõ
+  version: "1.21.11",       // Fabric 1.21.11 — phải chỉ định rõ
   checkTimeoutInterval: 30000,
   closeTimeout: 300,
   hideErrors: false,
