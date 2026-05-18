@@ -1,7 +1,7 @@
 {
   "name": "bot-mc",
   "version": "1.0.0",
-  "description": "",
+  "description": "AFK bot for Aternos Fabric 1.21.1",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
@@ -11,8 +11,7 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "express": "^5.2.1",
-    "minecraft-protocol": "^1.66.2",
+    "express": "^4.21.2",
     "mineflayer": "^4.37.1"
   }
 }
