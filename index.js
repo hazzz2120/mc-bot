@@ -1,62 +1,75 @@
-const mineflayer = require("mineflayer")
-const express = require("express")
+const mineflayer = require("mineflayer");
+const express = require("express");
 
-// giữ server sống (Railway không sleep)
-const app = express()
-app.get("/", (req, res) => res.send("OK"))
-app.listen(process.env.PORT || 3000)
+// =====================
+// KEEP ALIVE SERVER (Railway)
+// =====================
+const app = express();
+app.get("/", (req, res) => res.send("OK"));
+app.listen(process.env.PORT || 3000);
 
-// anti crash
-process.on("uncaughtException", () => {})
-process.on("unhandledRejection", () => {})
+// =====================
+// CONFIG
+// =====================
+const CONFIG = {
+  host: "furyvn.aternos.me",
+  port: 29776,
+  username: "vianhdz",
+  auth: "offline",
+  version: "1.21.11" // ⚠️ đổi đúng version server
+};
 
+// =====================
+// BOT FUNCTION
+// =====================
 function createBot() {
-  console.log("Creating bot...")
+  console.log("[BOT] Starting...");
 
-  const bot = mineflayer.createBot({
-    host: "furyvn.aternos.me",
-    port: 29776,
-    username: "vianhdz",
-    auth: "offline",
-    version: false
-  })
+  const bot = mineflayer.createBot(CONFIG);
 
-  // giảm load ngay khi login
-  bot.once("login", () => {
-    console.log("Logged in")
+  // =====================
+  // DEBUG LOGS (QUAN TRỌNG)
+  // =====================
+  bot.on("login", () => {
+    console.log("[BOT] Logged in");
+  });
 
-    bot._client.write("settings", {
-      locale: "en_US",
-      viewDistance: 2,   // cực thấp
-      chatFlags: 0,
-      chatColors: false,
-      skinParts: 0,
-      mainHand: 1
-    })
-  })
+  bot.on("spawn", () => {
+    console.log("[BOT] Spawned in world");
 
-  bot.once("spawn", () => {
-    console.log("Bot spawned")
+    // ổn định camera (không spam physics hack)
+    bot.look(0, 0, true);
+    bot.clearControlStates();
+  });
 
-    // đứng yên hoàn toàn = CPU gần 0
-    bot.clearControlStates()
-    bot.look(0, 0, true)
+  bot.on("kicked", (reason) => {
+    console.log("[BOT] KICKED:", reason);
+  });
 
-    // 🔥 QUAN TRỌNG: tắt xử lý entity (giảm CPU mạnh)
-    bot.entities = {}
+  bot.on("error", (err) => {
+    console.log("[BOT] ERROR:", err);
+  });
 
-    // 🔥 chặn physics loop
-    bot.physicsEnabled = false
-  })
+  bot.on("end", (reason) => {
+    console.log("[BOT] DISCONNECTED:", reason || "unknown");
 
-  // reconnect chậm lại (đỡ tốn CPU)
-  bot.on("end", () => {
-    console.log("Disconnected → reconnect sau 30s")
-    setTimeout(createBot, 30000)
-  })
+    // reconnect an toàn
+    setTimeout(() => {
+      createBot();
+    }, 15000);
+  });
 
-  // tránh spam log (tốn CPU)
-  bot.on("error", () => {})
+  // =====================
+  // ANTI CRASH (nhưng không che lỗi quan trọng)
+  // =====================
+  process.on("uncaughtException", (err) => {
+    console.log("[PROCESS ERROR]", err);
+  });
+
+  process.on("unhandledRejection", (err) => {
+    console.log("[PROMISE ERROR]", err);
+  });
 }
 
-createBot()
+// start bot
+createBot();
