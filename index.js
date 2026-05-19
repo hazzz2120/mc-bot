@@ -10,7 +10,7 @@ app.listen(process.env.PORT || 3000);
 const CONFIG = {
   host: "furyvn.aternos.me",
   port: 29776,
-  username: "vianhdz",
+  username: "dev.vianhdz",
   auth: "offline",
   version: "1.21.11",       // Fabric 1.21.11 — phải chỉ định rõ
   checkTimeoutInterval: 30000,
@@ -36,13 +36,13 @@ function createBot() {
   if (isConnecting) return;
   isConnecting = true;
 
-  console.log("[BOT] Connecting...");
+  console.log("[vianhdz] đang kết nối");
 
   let bot;
   try {
     bot = mineflayer.createBot(CONFIG);
   } catch (err) {
-    console.log("[BOT] createBot error:", err.message);
+    console.log("vianhdz] tạo bot lỗi:", err.message);
     isConnecting = false;
     scheduleReconnect();
     return;
@@ -50,35 +50,41 @@ function createBot() {
 
   bot.once("login", () => {
     isConnecting = false;
-    console.log("[BOT] Logged in as", CONFIG.username);
+    console.log("[vianhdz] đã đăng nhập với tên", CONFIG.username);
   });
 
   bot.once("spawn", () => {
-    console.log("[BOT] Spawned — AFK loop started");
+    console.log("[vianh] Spawned — vòng lặp AFK bắt đầu");
     clearAfk(); // phòng trường hợp spawn lại
 
     bot.clearControlStates();
 
     // AFK: nhảy nhẹ + xoay ngẫu nhiên mỗi 25 giây
     // (đủ để chống kick, không cần dày hơn)
-    afkInterval = setInterval(() => {
-      if (!bot.entity) return;
+afkInterval = setInterval(() => {
+  if (!bot.entity) return;
 
-      bot.setControlState("jump", true);
-      setTimeout(() => {
-        if (bot.entity) bot.setControlState("jump", false);
-      }, 200);
+  const actions = ["forward", "back", "left", "right"];
 
-      // Xoay đầu ngẫu nhiên để tránh bị detect là bot đứng yên
-      bot.look(Math.random() * Math.PI * 2, 0, false);
+  // chọn hành động ngẫu nhiên
+  const action = actions[Math.floor(Math.random() * actions.length)];
+  bot.setControlState(action, true);
 
-    }, 25000);
-  });
+  // nhảy ngẫu nhiên
+  if (Math.random() < 0.3) {
+    bot.setControlState("jump", true);
+    setTimeout(() => bot.setControlState("jump", false), 300);
+  }
 
-  bot.on("kicked", (reason) => {
-    const msg = typeof reason === "string" ? reason : JSON.stringify(reason);
-    console.log("[BOT] Kicked:", msg.slice(0, 200));
-  });
+  // quay đầu
+  bot.look(Math.random() * Math.PI * 2, (Math.random() - 0.5) * 0.5, false);
+
+  // dừng sau 1–3s
+  setTimeout(() => {
+    bot.clearControlStates();
+  }, 1000 + Math.random() * 2000);
+
+}, 8000 + Math.random() * 7000); // không đều
 
   bot.on("error", (err) => {
     // Bỏ qua lỗi ECONNRESET thông thường để tránh log rác
@@ -96,8 +102,13 @@ function createBot() {
 }
 
 // ─── Reconnect an toàn (tránh double-reconnect) ───────────────────────────────
-function scheduleReconnect(delay = 15000) {
+function scheduleReconnect() {
   if (reconnectTimer) return;
+
+  const delay = 60000 + Math.random() * 60000; // 60–120s
+
+  console.log(`[BOT] Reconnect in ${Math.round(delay/1000)}s`);
+
   reconnectTimer = setTimeout(() => {
     reconnectTimer = null;
     createBot();
