@@ -53,38 +53,40 @@ function createBot() {
     console.log("[vianhdz] đã đăng nhập với tên", CONFIG.username);
   });
 
-  bot.once("spawn", () => {
-    console.log("[vianh] Spawned — vòng lặp AFK bắt đầu");
-    clearAfk(); // phòng trường hợp spawn lại
+bot.once("spawn", () => {
+  console.log("[vianh] Spawned — vòng lặp AFK bắt đầu");
+  clearAfk();
 
-    bot.clearControlStates();
+  bot.clearControlStates();
 
-    // AFK: nhảy nhẹ + xoay ngẫu nhiên mỗi 25 giây
-    // (đủ để chống kick, không cần dày hơn)
-afkInterval = setInterval(() => {
-  if (!bot.entity) return;
+  afkInterval = setInterval(() => {
+    if (!bot.entity) return;
 
-  const actions = ["forward", "back", "left", "right"];
+    const actions = ["forward", "back", "left", "right"];
+    const action = actions[Math.floor(Math.random() * actions.length)];
 
-  // chọn hành động ngẫu nhiên
-  const action = actions[Math.floor(Math.random() * actions.length)];
-  bot.setControlState(action, true);
+    bot.setControlState(action, true);
 
-  // nhảy ngẫu nhiên
-  if (Math.random() < 0.3) {
-    bot.setControlState("jump", true);
-    setTimeout(() => bot.setControlState("jump", false), 300);
-  }
+    // nhảy random
+    if (Math.random() < 0.3) {
+      bot.setControlState("jump", true);
+      setTimeout(() => bot.setControlState("jump", false), 300);
+    }
 
-  // quay đầu
-  bot.look(Math.random() * Math.PI * 2, (Math.random() - 0.5) * 0.5, false);
+    // quay đầu
+    bot.look(
+      Math.random() * Math.PI * 2,
+      (Math.random() - 0.5) * 0.5,
+      false
+    );
 
-  // dừng sau 1–3s
-  setTimeout(() => {
-    bot.clearControlStates();
-  }, 1000 + Math.random() * 2000);
+    // dừng sau 1–3s
+    setTimeout(() => {
+      bot.clearControlStates();
+    }, 1000 + Math.random() * 2000);
 
-}, 8000 + Math.random() * 7000); // không đều
+  }, 8000 + Math.random() * 7000);
+});
 
   bot.on("error", (err) => {
     // Bỏ qua lỗi ECONNRESET thông thường để tránh log rác
@@ -94,10 +96,10 @@ afkInterval = setInterval(() => {
   });
 
   bot.once("end", (reason) => {
-    console.log("[BOT] Disconnected:", reason, "→ reconnect in 15s");
-    clearAfk();
-    isConnecting = false;
-    scheduleReconnect();
+  clearAfk();
+  isConnecting = false;
+  console.log("[BOT] Disconnected:", reason);
+  scheduleReconnect();
   });
 }
 
