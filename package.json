@@ -1,7 +1,7 @@
 {
   "name": "bot-mc",
   "version": "1.0.0",
-  "description": "AFK bot for Aternos Fabric 1.21.11",
+  "description": "AFK bot for Aternos sever",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
