@@ -9,8 +9,8 @@ app.listen(process.env.PORT || 3000);
 
 // ─── Cấu hình bot ────────────────────────────────────────────────────────────
 const CONFIG = {
-  host: "nguyennam5812.aternos.me",
-  port: 42917,
+  host: "furyvn.aternos.me",
+  port: 29776,
   username: "dev.vianhdz",
   auth: "offline",
   version: false,       // Fabric 1.21.11 — phải chỉ định rõ
