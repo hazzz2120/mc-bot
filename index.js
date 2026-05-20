@@ -9,11 +9,11 @@ app.listen(process.env.PORT || 3000);
 
 // ─── Cấu hình bot ────────────────────────────────────────────────────────────
 const CONFIG = {
-  host: "furyvn.aternos.me",
-  port: 29776,
+  host: "nguyennam5812.aternos.me",
+  port: 42917,
   username: "dev.vianhdz",
   auth: "offline",
-  version: "1.21.11",       // Fabric 1.21.11 — phải chỉ định rõ
+  version: false,       // Fabric 1.21.11 — phải chỉ định rõ
   checkTimeoutInterval: 30000,
   closeTimeout: 300,
   hideErrors: false,
