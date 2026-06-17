@@ -1,15 +1,19 @@
 {
-"name": "bot-mc",
-"version": "2.0.0",
-"description": "Minecraft Railway Bot",
-"main": "index.js",
-"type": "commonjs",
-"scripts": {
-"start": "node index.js"
-},
-"dependencies": {
-"express": "^5.2.1",
-"mineflayer": "^4.37.1",
-"mineflayer-pathfinder": "^2.4.5"
-}
+  "name": "bot-mc",
+  "version": "1.0.0",
+  "description": "AFK bot for Aternos Fabric 1.21.x",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mineflayer": "^4.37.1",
+    "mineflayer-pathfinder": "^2.4.5",
+    "minecraft-data": "^3.69.0"
+  }
 }
