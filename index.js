@@ -21,7 +21,7 @@ port: 29776,
 username: "dev.vianhdz",
 auth: "offline",
 
-version: 1.21.11,
+version: false,
 
 checkTimeoutInterval: 30000,
 hideErrors: false
